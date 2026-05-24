@@ -35,7 +35,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          public-key-location: file:../secrets/jwt_public_key.pem
+          public-key-location: file:../secrets/jwt_public_key_pkcs8.pem
 
 logging:
   level:

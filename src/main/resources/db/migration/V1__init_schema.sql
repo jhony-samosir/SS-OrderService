@@ -137,15 +137,15 @@ COMMENT ON TABLE order_status_histories IS 'Auditable logging of all order lifec
 CREATE INDEX idx_order_status_histories_order_id ON order_status_histories (order_id);
 
 -- =============================================================================
--- TABLE: outbox_messages (Transactional Outbox Pattern)
+-- TABLE: outbox_events (Transactional Outbox Pattern)
 -- =============================================================================
-CREATE TABLE outbox_messages (
+CREATE TABLE outbox_events (
     id             INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     public_id      UUID NOT NULL DEFAULT gen_random_uuid() UNIQUE,
     event_type     VARCHAR(255) NOT NULL,
     aggregate_type VARCHAR(100) NOT NULL,
     aggregate_id   INT NOT NULL,
-    payload        TEXT NOT NULL,
+    payload        JSONB NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'PUBLISHED', 'FAILED')),
     retry_count    INT NOT NULL DEFAULT 0,
     created_at     TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -153,23 +153,23 @@ CREATE TABLE outbox_messages (
     error_message  TEXT
 );
 
-COMMENT ON TABLE outbox_messages IS 'Transactional Outbox: guarantees at-least-once delivery for domain events to message broker';
+COMMENT ON TABLE outbox_events IS 'Transactional Outbox: guarantees at-least-once delivery for domain events to message broker';
 
-CREATE INDEX idx_outbox_messages_pending ON outbox_messages (status, created_at) WHERE status = 'PENDING';
-CREATE INDEX idx_outbox_messages_aggregate ON outbox_messages (aggregate_type, aggregate_id);
+CREATE INDEX idx_outbox_events_pending ON outbox_events (status, created_at) WHERE status = 'PENDING';
+CREATE INDEX idx_outbox_events_aggregate ON outbox_events (aggregate_type, aggregate_id);
 
 -- =============================================================================
--- TABLE: inbox_messages (Idempotent Event Consumption)
+-- TABLE: inbox_events (Idempotent Event Consumption)
 -- =============================================================================
-CREATE TABLE inbox_messages (
+CREATE TABLE inbox_events (
     message_id     VARCHAR(255) PRIMARY KEY,
     event_type     VARCHAR(255) NOT NULL,
     aggregate_type VARCHAR(100),
-    payload        TEXT NOT NULL,
+    payload        JSONB NOT NULL,
     processed_at   TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status         VARCHAR(50) NOT NULL DEFAULT 'PROCESSED'
 );
 
-COMMENT ON TABLE inbox_messages IS 'Guarantees message deduplication and idempotency';
+COMMENT ON TABLE inbox_events IS 'Guarantees message deduplication and idempotency';
 
-CREATE INDEX idx_inbox_messages_status ON inbox_messages(status);
+CREATE INDEX idx_inbox_events_status ON inbox_events(status);

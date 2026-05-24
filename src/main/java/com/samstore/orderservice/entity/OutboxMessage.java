@@ -2,11 +2,13 @@ package com.samstore.orderservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "outbox_messages")
+@Table(name = "outbox_events")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,7 +33,8 @@ public class OutboxMessage {
     @Column(name = "aggregate_id", nullable = false)
     private Integer aggregateId;
 
-    @Column(name = "payload", nullable = false, columnDefinition = "TEXT")
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "payload", nullable = false)
     private String payload;
 
     @Column(name = "status", nullable = false, length = 50)

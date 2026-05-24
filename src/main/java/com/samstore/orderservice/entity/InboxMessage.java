@@ -2,10 +2,12 @@ package com.samstore.orderservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "inbox_messages")
+@Table(name = "inbox_events")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +25,8 @@ public class InboxMessage {
     @Column(name = "aggregate_type", length = 100)
     private String aggregateType;
 
-    @Column(name = "payload", nullable = false, columnDefinition = "TEXT")
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "payload", nullable = false)
     private String payload;
 
     @Column(name = "processed_at", nullable = false)

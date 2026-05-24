@@ -68,7 +68,7 @@ public class OrderAddress {
     @Column(name = "postal_code", nullable = false, length = 20)
     private String postalCode;
 
-    @Column(name = "country_code", nullable = false, length = 2)
+    @Column(name = "country_code", nullable = false, columnDefinition = "bpchar", length = 2)
     @Builder.Default
     private String countryCode = "ID";
 }

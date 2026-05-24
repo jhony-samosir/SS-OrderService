@@ -72,7 +72,7 @@ public class Order {
     @Builder.Default
     private BigDecimal discountAmount = BigDecimal.ZERO;
 
-    @Column(name = "currency_code", nullable = false, length = 3)
+    @Column(name = "currency_code", nullable = false, columnDefinition = "bpchar", length = 3)
     @Builder.Default
     private String currencyCode = "IDR";
 

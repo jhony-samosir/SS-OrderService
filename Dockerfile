@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-FROM eclipse-temurin:25-jdk AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
 # Install Maven
@@ -10,7 +10,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Stage 2: Runtime stage
-FROM eclipse-temurin:25-jre
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 

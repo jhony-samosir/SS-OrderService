@@ -18,7 +18,7 @@
     <!-- Docker/Production profile: Structured JSON logging matching Fluent Bit & Loki -->
     <springProfile name="docker">
         <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder class="org.springframework.boot.logging.logback.LogbackStructuredLoggingEncoder">
+            <encoder class="org.springframework.boot.logging.logback.StructuredLogEncoder">
                 <format>logstash</format>
             </encoder>
         </appender>
