@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,6 +26,13 @@ public class OrderController {
         log.info("REST API Request to create order");
         OrderResponse response = orderService.createOrder(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrderResponse>> getOrders() {
+        log.info("REST API Request to fetch all orders for the current user");
+        List<OrderResponse> response = orderService.getOrdersForCurrentUser();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{publicId}")

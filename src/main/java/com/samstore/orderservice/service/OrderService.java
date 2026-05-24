@@ -133,6 +133,16 @@ public class OrderService {
         return mapToResponse(order);
     }
 
+    @Transactional(readOnly = true)
+    public List<OrderResponse> getOrdersForCurrentUser() {
+        UUID userPublicId = extractUserPublicId();
+        log.info("Fetching orders for user public ID: {}", userPublicId);
+        List<Order> orders = orderRepository.findByUserPublicIdOrderByCreatedAtDesc(userPublicId);
+        return orders.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     private void createOutboxMessage(Order order) {
         try {
             // Create a payload object
