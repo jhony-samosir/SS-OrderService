@@ -1,0 +1,45 @@
+server:
+  port: 5003
+
+spring:
+  application:
+    name: ss-order-service
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/ss_order_db}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:123456}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: file:../secrets/jwt_public_key.pem
+
+logging:
+  level:
+    root: INFO
+    com.samstore.orderservice: DEBUG
+    org.springframework.security: INFO
+    org.springframework.web: INFO
