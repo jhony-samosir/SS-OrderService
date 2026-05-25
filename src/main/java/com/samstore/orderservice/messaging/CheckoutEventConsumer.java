@@ -55,7 +55,7 @@ public class CheckoutEventConsumer {
             Order order = Order.builder()
                     .publicId(orderPublicId)
                     .userId(event.getUserId())
-                    .userPublicId(UUID.randomUUID()) // Fallback public ID for asynchronous checkout
+                    .userPublicId(event.getUserPublicId()) // Map public ID from checkout event
                     .status("pending")
                     .subtotal(subtotal)
                     .shippingAmount(shippingAmount)
@@ -125,7 +125,7 @@ public class CheckoutEventConsumer {
                     .messageId(event.getCorrelationId())
                     .eventType("order.checkout.initiated")
                     .aggregateType("order")
-                    .payload(event.toString())
+                    .payload(objectMapper.writeValueAsString(event))
                     .processedAt(OffsetDateTime.now())
                     .status("PROCESSED")
                     .build();

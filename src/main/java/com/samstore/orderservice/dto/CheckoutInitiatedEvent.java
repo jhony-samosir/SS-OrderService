@@ -12,6 +12,7 @@ import java.util.UUID;
 public class CheckoutInitiatedEvent {
     private String correlationId; // This acts as the order's public ID
     private Integer userId;
+    private UUID userPublicId;
     private UUID cartPublicId;
     private List<CheckoutItemDto> items;
     private BigDecimal totalAmount;

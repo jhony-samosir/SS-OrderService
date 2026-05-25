@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String ORDERS_EXCHANGE = "samstore.orders";
+    public static final String ORDERS_EXCHANGE = "samstore.events";
     public static final String PAYMENT_EXCHANGE = "samstore.payment";
     public static final String PAYMENT_COMPLETED_QUEUE = "orders.payment-completed-queue";
     public static final String PAYMENT_COMPLETED_ROUTING_KEY = "payment.completed";
